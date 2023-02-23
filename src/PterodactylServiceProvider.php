@@ -9,6 +9,6 @@ class PterodactylServiceProvider extends PackageServiceProvider {
     public function configurePackage(Package $package): void {
         $package
             ->name('laravel-pterodactyl')
-            ->hasConfigFile();
+            ->hasConfigFile('pterodactyl');
     }
 }
