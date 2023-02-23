@@ -1,6 +1,8 @@
 <?php
 
-// config for Pulsar/Pterodactyl
+/**
+ * General configuration file for Pterodactyl.
+ */
 return [
     'default' => env('PTERODACTYL_DEFAULT', null),
 
