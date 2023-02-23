@@ -11,4 +11,14 @@ class PterodactylServiceProvider extends PackageServiceProvider {
             ->name('laravel-pterodactyl')
             ->hasConfigFile('pterodactyl');
     }
+
+//    public function register(): void {
+//        parent::register();
+//    }
+
+    public function boot(): void {
+        dd(config('pterodactyl'));
+    }
+
+
 }
