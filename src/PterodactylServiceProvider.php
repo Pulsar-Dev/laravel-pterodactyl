@@ -2,6 +2,7 @@
 
 namespace Pulsar\Pterodactyl;
 
+use Illuminate\Foundation\Application;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -12,13 +13,9 @@ class PterodactylServiceProvider extends PackageServiceProvider {
             ->hasConfigFile('pterodactyl');
     }
 
-//    public function register(): void {
-//        parent::register();
-//    }
-
     public function boot(): void {
-        dd(config('pterodactyl'));
+        $this->app->singleton(PterodactylManager::class, static function(Application $app){
+            return new PterodactylManager($app);
+        });
     }
-
-
 }
