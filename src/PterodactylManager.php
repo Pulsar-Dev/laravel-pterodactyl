@@ -2,6 +2,7 @@
 
 namespace Pulsar\Pterodactyl;
 
+use InvalidArgumentException;
 use HCGCloud\Pterodactyl\Pterodactyl;
 use Illuminate\Foundation\Application;
 use Pulsar\Pterodactyl\Contracts\Factory;
@@ -27,6 +28,16 @@ class PterodactylManager implements Factory {
 
     protected function resolve(string $name): Pterodactyl {
         $config = $this->getConfig($name);
+
+        if (empty($config)){
+            throw new InvalidArgumentException("Host [{$name}] is not configured.");
+        }
+        if (empty($config['url'])){
+            throw new InvalidArgumentException("Host [{$name}] is missing its base URL.");
+        }
+        if (empty($config['type'])){
+            throw new InvalidArgumentException("Host [{$name}] is missing its API type.");
+        }
 
         return new Pterodactyl(
             $config['url'],
