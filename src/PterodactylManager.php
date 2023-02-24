@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use HCGCloud\Pterodactyl\Pterodactyl;
 use Illuminate\Foundation\Application;
 use Pulsar\Pterodactyl\Contracts\Factory;
+use HCGCloud\Pterodactyl\Exceptions\InvaildApiTypeException;
 
 class PterodactylManager implements Factory {
     protected array $instances = [];
@@ -39,11 +40,15 @@ class PterodactylManager implements Factory {
             throw new InvalidArgumentException("Host [{$name}] is missing its API type.");
         }
 
-        return new Pterodactyl(
-            $config['url'],
-            $config['secret'],
-            $config['type']
-        );
+        try {
+            return new Pterodactyl(
+                $config['url'],
+                $config['secret'],
+                $config['type']
+            );
+        } catch (InvaildApiTypeException $e){
+            throw new InvalidArgumentException("Host [{$name}] has an incorrect API type.");
+        }
     }
 
     protected function getConfig(string $name): array {
