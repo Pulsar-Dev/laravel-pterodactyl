@@ -27,6 +27,31 @@ class PterodactylManager implements Factory {
         return $this->instances[$name];
     }
 
+    public static function make(array $config): Pterodactyl {
+        if (empty($config)){
+            throw new InvalidArgumentException("Adhoc Host is not configured.");
+        }
+        if (empty($config['url'])){
+            throw new InvalidArgumentException("Adhoc Host is missing its base URL.");
+        }
+        if (empty($config['type'])){
+            throw new InvalidArgumentException("Adhoc Host is missing its API type.");
+        }
+        if (empty($config['secret'])){
+            throw new InvalidArgumentException("Adhoc Host is missing its secret key.");
+        }
+
+        try {
+            return new Pterodactyl(
+                $config['url'],
+                $config['secret'],
+                $config['type']
+            );
+        } catch (InvaildApiTypeException $e){
+            throw new InvalidArgumentException("Adhoc Host has an incorrect API type.");
+        }
+    }
+
     protected function resolve(string $name): Pterodactyl {
         $config = $this->getConfig($name);
 
