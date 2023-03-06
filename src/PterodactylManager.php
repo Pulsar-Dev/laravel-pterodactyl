@@ -13,6 +13,10 @@ class PterodactylManager implements Factory {
 
     public function __construct(protected Application $app){}
 
+    /** Fetch an instance of the Pterodactyl API client from the given configuration.
+     * @param ?string $name
+     * @return ?Pterodactyl
+     */
     public function instance(?string $name = null): ?Pterodactyl {
         $name = $name ?: $this->getDefaultInstance();
 
@@ -27,6 +31,11 @@ class PterodactylManager implements Factory {
         return $this->instances[$name];
     }
 
+    /** Make a Pterodactyl API instance.
+     * @param array $config
+     * @return Pterodactyl
+     * @throws InvalidArgumentException
+     */
     public static function make(array $config): Pterodactyl {
         if (empty($config)){
             throw new InvalidArgumentException("Adhoc Host is not configured.");
@@ -52,6 +61,10 @@ class PterodactylManager implements Factory {
         }
     }
 
+    /** Resolve a given name to the configured Pterodactyl instance.
+     * @param string $name
+     * @return Pterodactyl
+     */
     protected function resolve(string $name): Pterodactyl {
         $config = $this->getConfig($name);
 
@@ -76,10 +89,17 @@ class PterodactylManager implements Factory {
         }
     }
 
+    /** Get a given configuration from the settings.
+     * @param string $name
+     * @return array
+     */
     protected function getConfig(string $name): array {
         return $this->app['config']["pterodactyl.hosts.{$name}"] ?: [];
     }
 
+    /** Get the default configuration instance name.
+     * @return ?string
+     */
     public function getDefaultInstance(): ?string {
         return $this->app['config']['pterodactyl.default'];
     }
